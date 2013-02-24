@@ -140,5 +140,3 @@ if($saveFile) {
 } else {
 	print $code;
 }
-
-?>
