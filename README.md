@@ -25,3 +25,7 @@ In case you don't trust the script yet, you can even perform a syntax check afte
 
     find <directory> -name "*.php" -exec php -l "{}" \; | grep "error:"
 
+
+Thanks to
+================================
+Thanks to [Lebenslauf.com](https://lebenslauf.com) (German CV editor) for sponsoring the development.
