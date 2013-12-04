@@ -31,9 +31,9 @@ Revert
 
     Usage: php revert.php [-w] <file>
 
-Reverting has not yet been thoroughly tested, so use with extreme percaution!
+**Reverting has not yet been thoroughly tested, so use with extreme percaution!**
 
-Since there is no specific token for the short array syntax, it relies on checking the previous token for a variable, object property or function return ")".
+Since there is no specific token for the short array syntax, it assumes every "[" is an aray and relies on checking the previous token for a variable, object property, function return ")", nested array "]" and variable reference "}".
 
 
 Thanks to
