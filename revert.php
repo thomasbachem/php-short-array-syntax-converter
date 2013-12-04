@@ -91,7 +91,7 @@ for($i = 0; $i < count($tokens); ++$i) {
                                         || $tokens[$j][0] === T_STRING
                                         )
                                 )
-                                || in_array($tokens[$j], array(')', ']'), true)
+                                || in_array($tokens[$j], array(')', ']', '}'), true)
                             ){
                         $isArraySyntax = false;
                         break;
