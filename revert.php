@@ -76,9 +76,6 @@ for ($i = 0; $i < count($tokens); ++$i) {
 		$subOffset = $offset;
 		for ($j = $i - 1; $j > 0; $j--) {
 			$subOffset -= strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
-			//echo (is_string($tokens[$j])) ? $tokens[$j] : token_name($tokens[$j][0]) . ':' . $tokens[$j][1];
-			//echo "\n";
-
 
 			if (is_array($tokens[$j]) && $tokens[$j][0] === T_WHITESPACE) {
 				$subOffset += strlen($tokens[$j][1]);
@@ -101,7 +98,6 @@ for ($i = 0; $i < count($tokens); ++$i) {
 		}
 
 		if ($isArraySyntax) {
-
 			// Replace "[" with "array("
 			$replacements[] = array(
 				'start' => $offset - strlen($tokens[$i]),
