@@ -1,7 +1,7 @@
 PHP 5.4 Short Array Syntax Converter
 ================================
 
-Command-line script to convert PHP's `array()` syntax to PHP 5.4's short array syntax `[]` using PHP's built-in tokenizer.
+Command-line script to convert and revert PHP's `array()` syntax to PHP 5.4's short array syntax`[]` using PHP's built-in tokenizer.
 
 By relying on the PHP tokenizer, nothing but the array syntax itself will be altered. The script was successfully tested against code bases with more than 5.000 PHP files.
 
@@ -10,6 +10,7 @@ Usage
 ================================
 
     Usage: php convert.php [-w] <file>
+
     
 Run the script with the path of the PHP file you wish to convert as argument. This will print the converted source code to STDOUT. 
     
@@ -24,6 +25,15 @@ Use `find` to convert a whole directory recursively:
 In case you don't trust the script yet, you can even perform a syntax check after conversion:
 
     find <directory> -name "*.php" -exec php -l "{}" \; | grep "error:"
+
+Revert
+================================
+
+    Usage: php revert.php [-w] <file>
+
+Reverting has not yet been thoroughly tested, so use with extreme percaution!
+
+Since there is no specific token for the short array syntax, it relies on checking the previous token for a variable, object property or function return ")".
 
 
 Thanks to
