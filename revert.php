@@ -19,12 +19,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
  *
- * @link      https://github.com/thomasbachem/php-short-array-syntax-converter
+ * @link	  https://github.com/thomasbachem/php-short-array-syntax-converter
  *
- * @link      http://php.net/manual/en/language.types.array.php
+ * @link	  http://php.net/manual/en/language.types.array.php
  *
- * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <mail@thomasbachem.com>
+ * @license	  http://www.gnu.org/licenses/lgpl.html
+ * @author	  Thomas Bachem <mail@thomasbachem.com>
  */
 
 // - - - - - HANDLE COMMAND LINE ARGUMENTS - - - - -
@@ -33,23 +33,23 @@ $filePath = null;
 $saveFile = false;
 
 if ($argc > 3) {
-    file_put_contents('php://stderr', 'Usage: php revert.php [-w] <file>' . "\n");
-    exit(1);
+	file_put_contents('php://stderr', 'Usage: php revert.php [-w] <file>' . "\n");
+	exit(1);
 }
 for ($i = 1; $i < $argc; ++$i) {
-    if ($argv[$i] && $argv[$i][0] == '-') {
-        $saveFile = ($argv[$i] == '-w');
-    } else {
-        $filePath = $argv[$i];
-    }
+	if ($argv[$i] && $argv[$i][0] == '-') {
+		$saveFile = ($argv[$i] == '-w');
+	} else {
+		$filePath = $argv[$i];
+	}
 }
 
 if (!$filePath) {
-    file_put_contents('php://stderr', 'Usage: php revert.php [-w] <file>' . "\n");
-    exit(1);
+	file_put_contents('php://stderr', 'Usage: php revert.php [-w] <file>' . "\n");
+	exit(1);
 } elseif (!file_exists($filePath)) {
-    file_put_contents('php://stderr', 'File "' . $filePath . '" not found.' . "\n");
-    exit(1);
+	file_put_contents('php://stderr', 'File "' . $filePath . '" not found.' . "\n");
+	exit(1);
 }
 
 
@@ -64,74 +64,74 @@ $tokens = token_get_all($code);
 $replacements = array();
 $offset = 0;
 for ($i = 0; $i < count($tokens); ++$i) {
-    // Keep track of the current byte offset in the source code
-    $offset += strlen(is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i]);
+	// Keep track of the current byte offset in the source code
+	$offset += strlen(is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i]);
 
-    // "[" literal could either be an array index pointer
-    // or an array definition
-    if (is_string($tokens[$i]) && $tokens[$i] === "[") {
+	// "[" literal could either be an array index pointer
+	// or an array definition
+	if (is_string($tokens[$i]) && $tokens[$i] === "[") {
 
-        // Assume we're looking at an array definition by default
-        $isArraySyntax = true;
-        $subOffset = $offset;
-        for ($j = $i - 1; $j > 0; $j--) {
-            $subOffset -= strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
-            //echo (is_string($tokens[$j])) ? $tokens[$j] : token_name($tokens[$j][0]) . ':' . $tokens[$j][1];
-            //echo "\n";
+		// Assume we're looking at an array definition by default
+		$isArraySyntax = true;
+		$subOffset = $offset;
+		for ($j = $i - 1; $j > 0; $j--) {
+			$subOffset -= strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
+			//echo (is_string($tokens[$j])) ? $tokens[$j] : token_name($tokens[$j][0]) . ':' . $tokens[$j][1];
+			//echo "\n";
 
 
-            if (is_array($tokens[$j]) && $tokens[$j][0] === T_WHITESPACE) {
-                $subOffset += strlen($tokens[$j][1]);
-                continue;
-            }
-            // Look for a previous variable or function return
-            // to make sure we're not looking at an array pointer
-            elseif (
-                (is_array($tokens[$j]) && (
-                $tokens[$j][0] === T_VARIABLE || $tokens[$j][0] === T_STRING
-                )
-                ) || in_array($tokens[$j], array(')', ']', '}'), true)
-            ) {
-                $isArraySyntax = false;
-                break;
-            } else {
+			if (is_array($tokens[$j]) && $tokens[$j][0] === T_WHITESPACE) {
+				$subOffset += strlen($tokens[$j][1]);
+				continue;
+			}
+			// Look for a previous variable or function return
+			// to make sure we're not looking at an array pointer
+			elseif (
+				(is_array($tokens[$j]) && (
+				$tokens[$j][0] === T_VARIABLE || $tokens[$j][0] === T_STRING
+				)
+				) || in_array($tokens[$j], array(')', ']', '}'), true)
+			) {
+				$isArraySyntax = false;
+				break;
+			} else {
 
-                break;
-            }
-        }
+				break;
+			}
+		}
 
-        if ($isArraySyntax) {
+		if ($isArraySyntax) {
 
-            // Replace "[" with "array("
-            $replacements[] = array(
-                'start' => $offset - strlen($tokens[$i]),
-                'end' => $offset,
-                'string' => 'array(',
-            );
+			// Replace "[" with "array("
+			$replacements[] = array(
+				'start' => $offset - strlen($tokens[$i]),
+				'end' => $offset,
+				'string' => 'array(',
+			);
 
-            // Look for matching closing bracket ("]")
-            $subOffset = $offset;
-            $openBracketsCount = 1;
-            for ($j = $i + 1; $j < count($tokens); ++$j) {
-                $subOffset += strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
+			// Look for matching closing bracket ("]")
+			$subOffset = $offset;
+			$openBracketsCount = 1;
+			for ($j = $i + 1; $j < count($tokens); ++$j) {
+				$subOffset += strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
 
-                if (is_string($tokens[$j]) && $tokens[$j] == '[') {
-                    ++$openBracketsCount;
-                } elseif (is_string($tokens[$j]) && $tokens[$j] == ']') {
-                    --$openBracketsCount;
-                    if ($openBracketsCount == 0) {
-                        // Replace "]" with ")"
-                        $replacements[] = array(
-                            'start' => $subOffset - 1,
-                            'end' => $subOffset,
-                            'string' => ')',
-                        );
-                        break;
-                    }
-                }
-            }
-        }
-    }
+				if (is_string($tokens[$j]) && $tokens[$j] == '[') {
+					++$openBracketsCount;
+				} elseif (is_string($tokens[$j]) && $tokens[$j] == ']') {
+					--$openBracketsCount;
+					if ($openBracketsCount == 0) {
+						// Replace "]" with ")"
+						$replacements[] = array(
+							'start' => $subOffset - 1,
+							'end' => $subOffset,
+							'string' => ')',
+						);
+						break;
+					}
+				}
+			}
+		}
+	}
 }
 
 
@@ -139,18 +139,18 @@ for ($i = 0; $i < count($tokens); ++$i) {
 // Apply the replacements to the source code
 $offsetChange = 0;
 foreach ($replacements as $replacement) {
-    $code = substr_replace($code, $replacement['string'], $replacement['start'] + $offsetChange, $replacement['end'] - $replacement['start']);
-    $offsetChange += strlen($replacement['string']) - ($replacement['end'] - $replacement['start']);
+	$code = substr_replace($code, $replacement['string'], $replacement['start'] + $offsetChange, $replacement['end'] - $replacement['start']);
+	$offsetChange += strlen($replacement['string']) - ($replacement['end'] - $replacement['start']);
 }
 
 
 // - - - - - OUTPUT/WRITE NEW CODE - - - - -
 
 if ($saveFile) {
-    if (count($replacements) > 0) {
-        file_put_contents($filePath, $code);
-        echo count($replacements) . ' replacements';
-    }
+	if (count($replacements) > 0) {
+		file_put_contents($filePath, $code);
+		echo count($replacements) . ' replacements';
+	}
 } else {
-    print $code;
+	print $code;
 }
