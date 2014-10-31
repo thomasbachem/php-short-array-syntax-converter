@@ -7,7 +7,7 @@ By relying on the PHP tokenizer, nothing but the array syntax itself will be alt
 
 Installation via Composer
 ===========
-Just add "thomasbachem/php-short-array-syntax-converter": "dev-master" to your require(-dev) section and run update command on Composer.
+Just add `"thomasbachem/php-short-array-syntax-converter": "dev-master"` to your require(-dev) section and run update command on Composer.
 
 Usage
 ================================
