@@ -5,11 +5,14 @@ Command-line script to convert PHP's `array()` syntax to PHP 5.4's short array s
 
 By relying on the PHP tokenizer, nothing but the array syntax itself will be altered. The script was successfully tested against code bases with more than 5.000 PHP files.
 
+Installation via Composer
+===========
+
 
 Usage
 ================================
 
-    Usage: php convert.php [-w] <file>
+    Usage: php array-converter.php [-w] <file>
     
 Run the script with the path of the PHP file you wish to convert as argument. This will print the converted source code to STDOUT. 
     
@@ -19,7 +22,7 @@ In case of any error, an error message is written to STDERR and the script exits
 
 Use `find` to convert a whole directory recursively:
 
-    find <directory> -name "*.php" -exec php "convert.php" -w "{}" \;
+    find <directory> -name "*.php" -exec php "array-converter.php" -w "{}" \;
     
 In case you don't trust the script yet, you can even perform a syntax check after conversion:
 
