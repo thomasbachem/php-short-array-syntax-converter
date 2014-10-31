@@ -1,0 +1,31 @@
+{
+    "name": "thomasbachem/php-short-array-syntax-converter",
+    "description": "Command-line script to convert PHP's array() syntax to PHP 5.4's short array syntax [] using PHP's built-in tokenizer.",
+    "type": "library",
+    "homepage": "https://github.com/a-vasyliev/php-short-array-syntax-converter",
+    "keywords": [
+        "short",
+        "array",
+        "converter",
+        "php"
+    ],
+    "authors": [
+        {
+            "name": "Thomas Bachem",
+            "email": "mail@thomasbachem.com",
+            "homepage": "http://thomasbachem.com"
+        },
+        {
+            "name": "Andrii Vasyliev",
+            "email": "contact@andrey-vasiliev.com",
+            "homepage": "http://andrey-vasiliev.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4"
+    },
+    "bin": [
+        "bin/array-converter"
+    ]
+}
