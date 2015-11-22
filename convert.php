@@ -141,7 +141,12 @@ foreach ($replacements as $replacement) {
 // - - - - - OUTPUT/WRITE NEW CODE - - - - -
 
 if ($saveFile) {
-    file_put_contents($filePath, $code);
+    if ($replacements) {
+        file_put_contents($filePath, $code);
+        print count($replacements) . ' replacements.' . "\n";
+    } else {
+        print 'No replacements.' . "\n";
+    }
 } else {
     print $code;
 }
