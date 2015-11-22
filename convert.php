@@ -34,24 +34,24 @@
 $filePath = null;
 $saveFile = false;
 
-if($argc > 3) {
-	file_put_contents('php://stderr', 'Usage: php convert.php [-w] <file>' . "\n");
-	exit(1);
+if ($argc > 3) {
+    file_put_contents('php://stderr', 'Usage: php convert.php [-w] <file>' . "\n");
+    exit(1);
 }
-for($i = 1; $i < $argc; ++$i) {
-	if($argv[$i] && $argv[$i][0] == '-') {
-		$saveFile = ($argv[$i] == '-w');
-	} else {
-		$filePath = $argv[$i];
-	}
+for ($i = 1; $i < $argc; ++$i) {
+    if ($argv[$i] && $argv[$i][0] == '-') {
+        $saveFile = ($argv[$i] == '-w');
+    } else {
+        $filePath = $argv[$i];
+    }
 }
 
-if(!$filePath) {
-	file_put_contents('php://stderr', 'Usage: php convert.php [-w] <file>' . "\n");
-	exit(1);
-} elseif(!file_exists($filePath)) {
-	file_put_contents('php://stderr', 'File "' . $filePath . '" not found.' . "\n");
-	exit(1);
+if (!$filePath) {
+    file_put_contents('php://stderr', 'Usage: php convert.php [-w] <file>' . "\n");
+    exit(1);
+} elseif (!file_exists($filePath)) {
+    file_put_contents('php://stderr', 'File "' . $filePath . '" not found.' . "\n");
+    exit(1);
 }
 
 
@@ -65,61 +65,61 @@ $tokens = token_get_all($code);
 
 $replacements = array();
 $offset = 0;
-for($i = 0; $i < count($tokens); ++$i) {
-	// Keep track of the current byte offset in the source code
-	$offset += strlen(is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i]);
-	
-	// T_ARRAY could either mean the "array(...)" syntax we're looking for
-	// or a type hinting statement ("function(array $foo) { ... }")
-	if(is_array($tokens[$i]) && $tokens[$i][0] === T_ARRAY) {
-		// Look for a subsequent opening bracket ("(") to be sure we're actually
-		// looking at an "array(...)" statement
-		$isArraySyntax = false;
-		$subOffset = $offset;
-		for($j = $i + 1; $j < count($tokens); ++$j) {
-			$subOffset += strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
-			
-			if(is_string($tokens[$j]) && $tokens[$j] == '(') {
-				$isArraySyntax = true;
-				break;
-			} elseif(!is_array($tokens[$j]) || $tokens[$j][0] !== T_WHITESPACE) {
-				$isArraySyntax = false;
-				break;
-			}
-		}
-		
-		if($isArraySyntax) {
-			// Replace "array" and the opening bracket (including preceeding whitespace) with "["
-			$replacements[] = array(
-				'start'  => $offset - strlen($tokens[$i][1]),
-				'end'    => $subOffset,
-				'string' => '[',
-			);
-			
-			// Look for matching closing bracket (")")
-			$subOffset = $offset;
-			$openBracketsCount = 0;
-			for($j = $i + 1; $j < count($tokens); ++$j) {
-				$subOffset += strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
-				
-				if(is_string($tokens[$j]) && $tokens[$j] == '(') {
-					++$openBracketsCount;
-				} elseif(is_string($tokens[$j]) && $tokens[$j] == ')') {
-					--$openBracketsCount;
-					
-					if($openBracketsCount == 0) {
-						// Replace ")" with "]"
-						$replacements[] = array(
-							'start'  => $subOffset - 1,
-							'end'    => $subOffset,
-							'string' => ']',
-						);
-						break;
-					}
-				}
-			}
-		}
-	}
+for ($i = 0; $i < count($tokens); ++$i) {
+    // Keep track of the current byte offset in the source code
+    $offset += strlen(is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i]);
+
+    // T_ARRAY could either mean the "array(...)" syntax we're looking for
+    // or a type hinting statement ("function(array $foo) { ... }")
+    if (is_array($tokens[$i]) && $tokens[$i][0] === T_ARRAY) {
+        // Look for a subsequent opening bracket ("(") to be sure we're actually
+        // looking at an "array(...)" statement
+        $isArraySyntax = false;
+        $subOffset = $offset;
+        for ($j = $i + 1; $j < count($tokens); ++$j) {
+            $subOffset += strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
+
+            if (is_string($tokens[$j]) && $tokens[$j] == '(') {
+                $isArraySyntax = true;
+                break;
+            } elseif (!is_array($tokens[$j]) || $tokens[$j][0] !== T_WHITESPACE) {
+                $isArraySyntax = false;
+                break;
+            }
+        }
+
+        if ($isArraySyntax) {
+            // Replace "array" and the opening bracket (including preceeding whitespace) with "["
+            $replacements[] = array(
+                'start' => $offset - strlen($tokens[$i][1]),
+                'end' => $subOffset,
+                'string' => '[',
+            );
+
+            // Look for matching closing bracket (")")
+            $subOffset = $offset;
+            $openBracketsCount = 0;
+            for ($j = $i + 1; $j < count($tokens); ++$j) {
+                $subOffset += strlen(is_array($tokens[$j]) ? $tokens[$j][1] : $tokens[$j]);
+
+                if (is_string($tokens[$j]) && $tokens[$j] == '(') {
+                    ++$openBracketsCount;
+                } elseif (is_string($tokens[$j]) && $tokens[$j] == ')') {
+                    --$openBracketsCount;
+
+                    if ($openBracketsCount == 0) {
+                        // Replace ")" with "]"
+                        $replacements[] = array(
+                            'start' => $subOffset - 1,
+                            'end' => $subOffset,
+                            'string' => ']',
+                        );
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -127,18 +127,21 @@ for($i = 0; $i < count($tokens); ++$i) {
 
 // Apply the replacements to the source code
 $offsetChange = 0;
-foreach($replacements as $replacement) {
-	$code = substr_replace($code, $replacement['string'], $replacement['start'] + $offsetChange, $replacement['end'] - $replacement['start']);
-	$offsetChange += strlen($replacement['string']) - ($replacement['end'] - $replacement['start']);
+foreach ($replacements as $replacement) {
+    $code = substr_replace(
+        $code,
+        $replacement['string'],
+        $replacement['start'] + $offsetChange,
+        $replacement['end'] - $replacement['start']
+    );
+    $offsetChange += strlen($replacement['string']) - ($replacement['end'] - $replacement['start']);
 }
 
 
 // - - - - - OUTPUT/WRITE NEW CODE - - - - -
 
-if($saveFile) {
-	file_put_contents($filePath, $code);
+if ($saveFile) {
+    file_put_contents($filePath, $code);
 } else {
-	print $code;
+    print $code;
 }
-
-?>
