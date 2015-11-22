@@ -18,9 +18,13 @@ You can add the `-w` switch if you want to override the original file with the c
     
 In case of any error, an error message is written to STDERR and the script exits with a return code of 1.
 
-Use `find` to convert a whole directory recursively:
+Use `find` to convert a whole directory recursively (on Linux/Mac):
 
     find <directory> -name "*.php" -exec php "convert.php" -w "{}" \;
+
+Or on Windows (thanks to John Jablonski for suggesting):
+
+    FOR /f "tokens=*" %a in ('dir *.php /S/B') DO php convert.php %a -w
     
 In case you don't trust the script yet, you can even perform a syntax check after conversion:
 
