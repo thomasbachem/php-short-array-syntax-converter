@@ -15,6 +15,8 @@ Usage
 Run the script with the path of the PHP file you wish to convert as argument. This will print the converted source code to STDOUT. 
     
 You can add the `-w` switch if you want to override the original file with the converted code.
+
+If you want the script to process PHP files with short open tags (`<?`) as well, you need to make sure that the [`short_open_tag`](http://php.net/manual/ini.core.php#ini.short-open-tag) setting is enabled in your `php.ini` file.
     
 In case of any error, an error message is written to STDERR and the script exits with a return code of 1.
 
@@ -29,6 +31,7 @@ Or on Windows (thanks to John Jablonski for suggesting):
 In case you don't trust the script yet, you can even perform a syntax check after conversion:
 
     find <directory> -name "*.php" -exec php -l "{}" \; | grep "error:"
+
 
 Revert
 ================================
