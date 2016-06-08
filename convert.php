@@ -50,7 +50,7 @@ for ($i = 1; $i < $argc; ++$i) {
 if (!$filePath) {
     file_put_contents('php://stderr', 'Usage: php convert.php [-w] <file>' . "\n");
     exit(1);
-} elseif (!file_exists($filePath)) {
+} elseif (!file_exists($filePath) && $filePath != 'php://stdin') {
     file_put_contents('php://stderr', 'File "' . $filePath . '" not found.' . "\n");
     exit(1);
 }
