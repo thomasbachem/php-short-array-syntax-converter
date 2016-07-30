@@ -1,34 +1,32 @@
-#!/usr/bin/env php
 <?php
+
+namespace Baguette\RefactorTool;
 
 /**
  * PHP 5.4 Short Array Syntax Converter
  *
  * Command-line script to convert PHP's "array()" syntax to PHP 5.4's
  * short array syntax "[]" using PHP's built-in tokenizer.
- * 
+ *
  * This script is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License (LGPL) as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
- * 
- * @link      https://github.com/thomasbachem/php-short-array-syntax-converter
  *
+ * @link      https://github.com/thomasbachem/php-short-array-syntax-converter
  * @link      http://php.net/manual/en/language.types.array.php
- * 
  * @license   http://www.gnu.org/licenses/lgpl.html
  * @author    Thomas Bachem <mail@thomasbachem.com>
  */
-
 
 // - - - - - HANDLE COMMAND LINE ARGUMENTS - - - - -
 
