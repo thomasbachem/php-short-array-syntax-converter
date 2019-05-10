@@ -14,7 +14,7 @@ Usage
     
 Run the script with the path of the PHP file you wish to convert as argument. This will print the converted source code to STDOUT. 
     
-You can add the `-w` switch if you want to override the original file with the converted code.
+You can add the `-w` switch if you want to overwrite the original file with the converted code.
 
 If you want the script to process PHP files with short open tags (`<?`) as well, you need to make sure that the [`short_open_tag`](http://php.net/manual/ini.core.php#ini.short-open-tag) setting is enabled in your `php.ini` file.
     
@@ -38,7 +38,7 @@ Revert
 
     Usage: php revert.php [-w] <file>
 
-**Reverting has not yet been thoroughly tested, so use with extreme percaution!**
+**Reverting has not yet been thoroughly tested, so use with extreme precaution!**
 
 Since there is no specific token for the short array syntax, it assumes every "[" is an aray and relies on checking the previous token for a variable, object property, function return ")", nested array "]" and variable reference "}".
 
